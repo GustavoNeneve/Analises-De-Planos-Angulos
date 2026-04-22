@@ -23,9 +23,17 @@
         
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: var(--bg-paper);
+            background: linear-gradient(120deg, var(--bg-paper), #EAE5D9, var(--bg-paper));
+            background-size: 200% 200%;
+            animation: bg-pan 15s ease infinite;
             color: var(--text-coffee);
             overflow: hidden;
+        }
+
+        @keyframes bg-pan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         h1, h2, h3, .font-title {
@@ -41,12 +49,14 @@
             mix-blend-mode: multiply;
             z-index: 0;
             pointer-events: none;
-            animation: float-blob 10s infinite alternate ease-in-out;
+            animation: float-blob 20s infinite ease-in-out;
         }
 
         @keyframes float-blob {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -30px) scale(1.1); }
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(30px, -50px) scale(1.1) rotate(10deg); }
+            66% { transform: translate(-20px, 20px) scale(0.95) rotate(-5deg); }
+            100% { transform: translate(0, 0) scale(1) rotate(0deg); }
         }
 
         /* Animações das estrelas */
@@ -93,12 +103,34 @@
             opacity: 0.7;
         }
 
-        /* Iframe do Vídeo */
-        .iframe-container {
-            border: 4px dashed var(--light-green);
+        /* Iframe do Vídeo - Borda Animada */
+        .iframe-wrapper-animated {
+            position: relative;
+            padding: 4px;
             border-radius: 1.5rem;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--light-green) 0,
+                var(--light-green) 12px,
+                transparent 12px,
+                transparent 24px
+            );
+            background-size: 34px 34px;
+            animation: stripe-march 1.5s linear infinite;
+        }
+        
+        @keyframes stripe-march {
+            0% { background-position: 0 0; }
+            100% { background-position: 34px 0; }
+        }
+
+        .iframe-container {
+            border-radius: 1.25rem;
             overflow: hidden;
             background: #FAFAF7;
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
 
         /* Animação de transição dos slides */
@@ -206,8 +238,8 @@
             { isCover: true, category: "Introdução" },
             { category: "Ângulos", title: "Câmera Alta", driveId: "1qCd-mpfDvR8jOxHxpqqUuq6aHoxKuI5Y" },
             { category: "Perspectiva", title: "POV - Câmera Alta", driveId: "1qOSrjZYhPJqdVDm13xPr2A2S7bb2MMHn" },
-            { category: "Ângulos", title: "Padrão", driveId: "1NmGfj6EcpS6uOp4XE-4GpNYxmo9aI19v" },
-            { category: "Movimentos de Câmera", title: "Panorâmica", driveId: "1MDb1OftbL0p5_A6OOXYKSAm9srWXJ9Ed" },
+            { category: "Movimentos de Câmera", title: "Panorâmica 1", driveId: "1NmGfj6EcpS6uOp4XE-4GpNYxmo9aI19v" },
+            { category: "Movimentos de Câmera", title: "Panorâmica 2", driveId: "1MDb1OftbL0p5_A6OOXYKSAm9srWXJ9Ed" },
             { category: "Planos", title: "Plano Fechado / Close", driveId: "1JH_1-CLql0Hv9oVsccjoAsSFDzVOlx7D" },
             { category: "Planos", title: "Plano Aberto", driveId: "11Vy6J5jVcagdBJnSJy9xaYKXV74XVlV2" },
             { category: "Planos", title: "Grande Plano Aberto", driveId: "1LeeYwMtTQbE8VoGgjZudlQttsNOWJXmI" },
@@ -229,7 +261,7 @@
             { category: "Movimentos de Câmera", title: "Grua", driveId: "1qDH0cC7iqYXXzXYutGEBnm86lEk_YdU4" },
             { category: "Movimentos de Câmera", title: "Travelling", driveId: "171FUAaYjAl1Xv2E9WVPoVcabU8Z9zdBW" },
             { category: "Perspectiva", title: "POV Câmera na Mão", driveId: "1qOSrjZYhPJqdVDm13xPr2A2S7bb2MMHn" },
-            { category: "Movimentos de Câmera", title: "Drone Zoom Out", driveId: "1xN9OAvKRZa9ZE5I_DN9Go28IpSFJNf6W" }
+            { category: "Movimentos de Câmera", title: "Drone Zoom Out 2", driveId: "1xN9OAvKRZa9ZE5I_DN9Go28IpSFJNf6W" }
         ];
 
         let currentIndex = 0;
@@ -391,8 +423,8 @@
                             </p>
                         </div>
                         <div class="flex-1 w-full lg:w-auto h-64 lg:h-full max-h-[500px] relative rounded-[2.5rem] overflow-hidden shadow-xl border-[6px] border-white/80">
-                            <!-- Pôster Oficial do IMDb/TMDB -->
-                            <img src="https://m.media-amazon.com/images/M/MV5BMGUzMjBiZTktNjA3YS00N2EzLThmYWYtODZhMmI1ZmFiYjZhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren Oficial Poster" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1000&auto=format&fit=crop';">
+                            <!-- Pôster Oficial do repositório local -->
+                            <img src="capa.png" alt="Frieren Oficial Poster" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1000&auto=format&fit=crop';">
                         </div>
                     </div>
                 `;
@@ -409,19 +441,21 @@
                             </h2>
                         </div>
                         
-                        <!-- Container 16:9 cravado -->
+                        <!-- Container 16:9 cravado animado -->
                         <div class="flex-1 w-full flex items-center justify-center min-h-0 relative">
-                            <div class="iframe-container w-full max-w-5xl aspect-video relative shadow-inner">
-                                <div class="absolute inset-0 flex items-center justify-center z-0 text-[#7B906F] flex-col gap-2">
-                                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
-                                    <span class="text-sm font-medium">Carregando cena...</span>
+                            <div class="iframe-wrapper-animated w-full max-w-5xl aspect-video shadow-inner">
+                                <div class="iframe-container">
+                                    <div class="absolute inset-0 flex items-center justify-center z-0 text-[#7B906F] flex-col gap-2">
+                                        <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
+                                        <span class="text-sm font-medium">Carregando cena...</span>
+                                    </div>
+                                    <iframe 
+                                        src="${iframeUrl}" 
+                                        class="w-full h-full absolute inset-0 z-10" 
+                                        allow="autoplay" 
+                                        frameborder="0">
+                                    </iframe>
                                 </div>
-                                <iframe 
-                                    src="${iframeUrl}" 
-                                    class="w-full h-full absolute inset-0 z-10" 
-                                    allow="autoplay" 
-                                    frameborder="0">
-                                </iframe>
                             </div>
                         </div>
                     </div>
