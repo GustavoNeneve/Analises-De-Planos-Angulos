@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação - Frieren ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes Soft/Arredondadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            /* Paleta Café + Natureza (Watercolor) */
+            --bg-paper: #F5F2EB;
+            --text-coffee: #4A3B32;
+            --text-light-coffee: #6B574B;
+            --accent-green: #7B906F;
+            --light-green: #A3B19B;
+            --star-gold: #E8D08D;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-paper);
+            color: var(--text-coffee);
+            overflow: hidden;
+        }
+
+        h1, h2, h3, .font-title {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Efeito Aquarela - Manchas de cor ao fundo */
+        .watercolor-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            mix-blend-mode: multiply;
+            z-index: 0;
+            pointer-events: none;
+            animation: float-blob 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes float-blob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* Animações das estrelas */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .star {
+            position: absolute;
+            color: var(--star-gold);
+            animation: twinkle 4s infinite ease-in-out;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism para os cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 16px 40px rgba(74, 59, 50, 0.08);
+            border-radius: 2rem;
+        }
+
+        /* Botões */
+        .btn-nature {
+            background-color: var(--accent-green);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(123, 144, 111, 0.3);
+        }
+        .btn-nature:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background-color: #637758;
+            box-shadow: 0 6px 16px rgba(123, 144, 111, 0.5);
+        }
+        .btn-nature:disabled {
+            background-color: #C1C9BD;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Iframe do Vídeo */
+        .iframe-container {
+            border: 4px dashed var(--light-green);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: #FAFAF7;
+        }
+
+        /* Animação de transição dos slides */
+        .fade-content {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar customizada para o roadmap */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--light-green);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen relative">
+
+    <!-- Fundo de Aquarela (Watercolor Blobs) -->
+    <div class="watercolor-blob bg-[#A3B19B] w-[600px] h-[600px] top-[-10%] left-[-10%]"></div>
+    <div class="watercolor-blob bg-[#D7CCC8] w-[500px] h-[500px] bottom-[-5%] right-[-5%]" style="animation-delay: -3s;"></div>
+    <div class="watercolor-blob bg-[#E8D08D] w-[400px] h-[400px] top-[30%] left-[40%] opacity-30" style="animation-delay: -6s;"></div>
+
+    <!-- Estrelinhas -->
+    <div id="stars-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- Layout Principal -->
+    <main class="w-full h-full p-4 md:p-6 flex gap-6 relative z-10 max-w-7xl mx-auto">
+        
+        <!-- ROADMAP (Sidebar) -->
+        <aside class="hidden md:flex flex-col w-72 glass-card p-6 h-full">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-white/60 p-2 rounded-xl text-[#7B906F]">
+                    <i data-lucide="map" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-title text-xl text-[#4A3B32] font-semibold">Roteiro</h3>
+            </div>
+            
+            <ul id="roadmap-list" class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                <!-- Itens gerados via JS -->
+            </ul>
+
+            <div class="mt-4 pt-4 border-t border-white/50 text-center">
+                <p class="text-sm text-[#6B574B] font-medium flex items-center justify-center gap-2">
+                    <i data-lucide="coffee" class="w-4 h-4"></i>
+                    <span id="roadmap-progress">0/27</span>
+                </p>
+            </div>
+        </aside>
+
+        <!-- ÁREA DO SLIDE -->
+        <section class="flex-1 flex flex-col h-full gap-4 min-w-0">
+            
+            <!-- Header Menor -->
+            <header class="flex justify-between items-center px-2 shrink-0">
+                <div class="flex items-center gap-2 md:hidden">
+                    <i data-lucide="leaf" class="text-[#7B906F] w-6 h-6"></i>
+                    <span class="font-title text-lg font-medium text-[#4A3B32]">Frieren</span>
+                </div>
+                <div class="hidden md:block"></div> <!-- Spacer -->
+                <div class="glass-card px-5 py-2 rounded-full text-sm font-bold text-[#7B906F] border border-white/50 shadow-sm">
+                    Slide <span id="current-slide">1</span> de <span id="total-slides">25</span>
+                </div>
+            </header>
+
+            <!-- Card de Conteúdo -->
+            <div class="glass-card flex-1 flex flex-col p-4 md:p-8 w-full relative overflow-hidden min-h-0">
+                <div id="slide-content" class="flex-1 flex flex-col items-center justify-center w-full fade-content min-h-0">
+                    <!-- Conteúdo injetado via JS -->
+                </div>
+
+                <!-- Controles -->
+                <div class="flex justify-between items-center mt-4 w-full pt-4 border-t border-white/30 shrink-0">
+                    <button id="btn-prev" class="btn-nature px-5 py-2 md:px-6 md:py-3 rounded-full flex items-center gap-2 font-title font-medium text-base md:text-lg">
+                        <i data-lucide="chevron-left"></i> Anterior
+                    </button>
+                    
+                    <div id="category-indicator" class="hidden md:block text-center font-title text-[#7B906F] tracking-widest uppercase text-sm font-bold opacity-80">
+                        Introdução
+                    </div>
+
+                    <button id="btn-next" class="btn-nature px-5 py-2 md:px-6 md:py-3 rounded-full flex items-center gap-2 font-title font-medium text-base md:text-lg">
+                        Próximo <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Inicializa ícones
+        lucide.createIcons();
+
+        // Dados da Apresentação exatos informados pelo usuário
+        const slidesData = [
+            { isCover: true, category: "Introdução" },
+            { category: "Ângulos", title: "Câmera Alta", driveId: "1qCd-mpfDvR8jOxHxpqqUuq6aHoxKuI5Y" },
+            { category: "Perspectiva", title: "POV - Câmera Alta", driveId: "1qOSrjZYhPJqdVDm13xPr2A2S7bb2MMHn" },
+            { category: "Ângulos", title: "Padrão", driveId: "1NmGfj6EcpS6uOp4XE-4GpNYxmo9aI19v" },
+            { category: "Movimentos de Câmera", title: "Panorâmica", driveId: "1MDb1OftbL0p5_A6OOXYKSAm9srWXJ9Ed" },
+            { category: "Planos", title: "Plano Fechado / Close", driveId: "1JH_1-CLql0Hv9oVsccjoAsSFDzVOlx7D" },
+            { category: "Planos", title: "Plano Aberto", driveId: "11Vy6J5jVcagdBJnSJy9xaYKXV74XVlV2" },
+            { category: "Planos", title: "Grande Plano Aberto", driveId: "1LeeYwMtTQbE8VoGgjZudlQttsNOWJXmI" },
+            { category: "Planos", title: "Plano Conjunto", driveId: "1LWNHOU-bfRfZGrNGX0c81qoQeubsEL9P" },
+            { category: "Movimentos de Câmera", title: "Tracking", driveId: "19YKvQeOl0dYf_uNgr41Y4gewb_6Mc2WW" },
+            { category: "Planos", title: "Plano Detalhe", driveId: "1WbTVITaCqJhxIVgeHX5DzPmnGacoXJQn" },
+            { category: "Efeitos de Lente", title: "Dolly Zoom Out", driveId: "1yc1xpD0hA-ktgds4uqgGnog7UymQxlEM" },
+            { category: "Planos", title: "Plano Geral", driveId: "1NjrENCf1JwJhlgmsr3BzoHQA-IT0YC0l" },
+            { category: "Ângulos", title: "Câmera Baixa", driveId: "1FMgd7DIsdmctEzR51EbV2a2T7cSlm8rM" },
+            { category: "Planos", title: "Plano Médio", driveId: "1k6Mme9noCyV_Z2BUF9Hfu3xlLdQ84u8_" },
+            { category: "Efeitos de Lente", title: "Dolly Zoom", driveId: "1oJ_VtlWWgxnsUciS6gcQR3nJ49BUwSsG" },
+            { category: "Perspectiva", title: "POV", driveId: "1tyCZPYZtcp5BWQPmBv601tUimhY4G1Fg" },
+            { category: "Planos", title: "Plano Americano", driveId: "19wLlDAQ3mLw1kVwgWRNu0MizYWVfXnp0" },
+            { category: "Movimentos de Câmera", title: "Tilt", driveId: "1Nm7ih94R-127UZ1H64JPDiaGpviodOYS" },
+            { category: "Ângulos", title: "Contra Plongée", driveId: "1BaEpQwMg6btBpd6mtD4pYmELe4xX5ERm" },
+            { category: "Efeitos de Lente", title: "Foco / Desfoco", driveId: "1lGwF9qT5eKvYW7ACJE_c05xdANbVDHhL" },
+            { category: "Ângulos", title: "Plongée", driveId: "1QMgLpg7dB9izG6pTCeLwLxKDFuVnapyE" },
+            { category: "Movimentos de Câmera", title: "Drone Zoom Out", driveId: "1xN9OAvKRZa9ZE5I_DN9Go28IpSFJNf6W" },
+            { category: "Movimentos de Câmera", title: "Grua", driveId: "1qDH0cC7iqYXXzXYutGEBnm86lEk_YdU4" },
+            { category: "Movimentos de Câmera", title: "Travelling", driveId: "171FUAaYjAl1Xv2E9WVPoVcabU8Z9zdBW" },
+            { category: "Perspectiva", title: "POV Câmera na Mão", driveId: "1qOSrjZYhPJqdVDm13xPr2A2S7bb2MMHn" },
+            { category: "Movimentos de Câmera", title: "Drone Zoom Out", driveId: "1xN9OAvKRZa9ZE5I_DN9Go28IpSFJNf6W" }
+        ];
+
+        let currentIndex = 0;
+        const categories = [...new Set(slidesData.map(s => s.category))];
+
+        // Elementos DOM
+        const slideContent = document.getElementById('slide-content');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const currentSlideEl = document.getElementById('current-slide');
+        const totalSlidesEl = document.getElementById('total-slides');
+        const categoryIndicator = document.getElementById('category-indicator');
+        const roadmapProgress = document.getElementById('roadmap-progress');
+
+        totalSlidesEl.textContent = slidesData.length;
+
+        // Renderiza o Roadmap com o novo modelo Acordeão (Por Tema)
+        function renderRoadmap() {
+            const roadmapList = document.getElementById('roadmap-list');
+            
+            let html = '';
+            categories.forEach(cat => {
+                const catSlides = slidesData.map((data, index) => ({data, index})).filter(item => item.data.category === cat);
+                const catId = cat.replace(/\s+/g, '-');
+                
+                html += `
+                    <li class="mb-2 roadmap-category" data-category="${cat}">
+                        <button onclick="toggleCategory('${cat}')" class="w-full flex justify-between items-center p-3 rounded-xl bg-white/40 hover:bg-white/60 transition-colors border border-white/50 text-[#4A3B32] font-title font-semibold shadow-sm">
+                            <span class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-[#7B906F]"></div>
+                                ${cat}
+                            </span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300" id="icon-${catId}"></i>
+                        </button>
+                        <ul class="mt-1 space-y-1 overflow-hidden transition-all duration-300 hidden" id="content-${catId}">
+                `;
+                
+                catSlides.forEach(item => {
+                    const title = item.data.isCover ? "Início / Capa" : item.data.title;
+                    html += `
+                            <li class="cursor-pointer group ml-3 border-l-2 border-[#A3B19B]/30 pl-3 py-1" id="nav-item-${item.index}" onclick="jumpToSlide(${item.index})">
+                                <div class="roadmap-item flex items-center gap-2 p-2 rounded-xl transition-all duration-300 border border-transparent">
+                                    <div class="roadmap-dot w-1.5 h-1.5 rounded-full bg-[#A3B19B] opacity-50 transition-all duration-300"></div>
+                                    <span class="title-text font-title font-medium text-[#6B574B] text-sm group-hover:text-[#4A3B32] transition-colors">${title}</span>
+                                </div>
+                            </li>
+                    `;
+                });
+                
+                html += `
+                        </ul>
+                    </li>
+                `;
+            });
+            
+            roadmapList.innerHTML = html;
+        }
+
+        // Função para abrir e fechar categorias no clique
+        window.toggleCategory = function(cat) {
+            const catId = cat.replace(/\s+/g, '-');
+            const content = document.getElementById(`content-${catId}`);
+            const icon = document.getElementById(`icon-${catId}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        };
+
+        // Atualiza o estado ativo no Roadmap e abre a aba correta
+        function updateRoadmapActiveState(activeIndex) {
+            const activeCat = slidesData[activeIndex].category;
+
+            // Abre a categoria ativa e fecha as outras
+            categories.forEach(cat => {
+                const catId = cat.replace(/\s+/g, '-');
+                const content = document.getElementById(`content-${catId}`);
+                const icon = document.getElementById(`icon-${catId}`);
+                
+                if (cat === activeCat) {
+                    content.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                } else {
+                    content.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+                }
+            });
+
+            // Destaca o item selecionado
+            slidesData.forEach((_, index) => {
+                const liElement = document.getElementById(`nav-item-${index}`);
+                if (!liElement) return;
+                
+                const item = liElement.querySelector('.roadmap-item');
+                const dot = item.querySelector('.roadmap-dot');
+                const titleText = item.querySelector('.title-text');
+                
+                if (index === activeIndex) {
+                    item.classList.add('bg-white/80', 'shadow-sm', 'border-white/60');
+                    dot.classList.remove('opacity-50', 'bg-[#A3B19B]');
+                    dot.classList.add('bg-[#7B906F]', 'scale-150');
+                    titleText.classList.replace('text-[#6B574B]', 'text-[#4A3B32]');
+                    titleText.classList.add('font-bold');
+                    
+                    // Rola suavemente até o item atual
+                    liElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    item.classList.remove('bg-white/80', 'shadow-sm', 'border-white/60');
+                    dot.classList.add('opacity-50', 'bg-[#A3B19B]');
+                    dot.classList.remove('bg-[#7B906F]', 'scale-150');
+                    titleText.classList.replace('text-[#4A3B32]', 'text-[#6B574B]');
+                    titleText.classList.remove('font-bold');
+                }
+            });
+            
+            roadmapProgress.textContent = `${activeIndex + 1}/${slidesData.length}`;
+        }
+
+        // Navegação direta pelo Roadmap
+        window.jumpToSlide = function(index) {
+            currentIndex = index;
+            renderSlide(currentIndex);
+        };
+
+        // Renderiza o Slide atual
+        function renderSlide(index) {
+            const data = slidesData[index];
+            
+            // Animação
+            slideContent.classList.remove('fade-content');
+            void slideContent.offsetWidth; // trigger reflow
+            slideContent.classList.add('fade-content');
+
+            if (data.isCover) {
+                slideContent.innerHTML = `
+                    <div class="flex flex-col lg:flex-row items-center gap-8 h-full w-full">
+                        <div class="flex-1 space-y-5 text-left w-full flex flex-col justify-center">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/50 rounded-full border border-white text-[#7B906F] font-bold tracking-wide shadow-sm self-start">
+                                <i data-lucide="leaf" class="w-4 h-4"></i> Análise Audiovisual
+                            </div>
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#4A3B32] font-title leading-tight">
+                                Frieren: A Jornada <br>Audiovisual
+                            </h1>
+                            
+                            <!-- Bloco com nomes -->
+                            <div class="bg-white/40 p-5 rounded-2xl border border-white/60 shadow-sm backdrop-blur-md relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-1 bg-[#7B906F] h-full"></div>
+                                <p class="text-[#4A3B32] font-semibold text-lg mb-1">Professor: <span class="font-normal text-[#6B574B]">Brian Hagemann</span></p>
+                                <p class="text-[#4A3B32] font-semibold text-lg">Aluno: <span class="font-normal text-[#6B574B]">Gustavo Nenevê</span></p>
+                            </div>
+
+                            <p class="text-sm text-[#7B906F] font-semibold flex items-center gap-2">
+                                <i data-lucide="coffee" class="w-5 h-5"></i>
+                                ${slidesData.length - 1} elementos da linguagem ilustrados.
+                            </p>
+                        </div>
+                        <div class="flex-1 w-full lg:w-auto h-64 lg:h-full max-h-[500px] relative rounded-[2.5rem] overflow-hidden shadow-xl border-[6px] border-white/80">
+                            <!-- Pôster Oficial do IMDb/TMDB -->
+                            <img src="https://m.media-amazon.com/images/M/MV5BMGUzMjBiZTktNjA3YS00N2EzLThmYWYtODZhMmI1ZmFiYjZhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Frieren Oficial Poster" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1000&auto=format&fit=crop';">
+                        </div>
+                    </div>
+                `;
+            } else {
+                const iframeUrl = `https://drive.google.com/file/d/${data.driveId}/preview`;
+                slideContent.innerHTML = `
+                    <div class="w-full h-full flex flex-col items-center min-h-0">
+                        <div class="mb-3 text-center shrink-0">
+                            <span class="inline-block px-4 py-1.5 bg-white/60 rounded-full text-[#7B906F] text-xs font-bold tracking-wider mb-2 border border-white/80 shadow-sm">
+                                ${data.category}
+                            </span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-[#4A3B32] capitalize flex items-center justify-center gap-3">
+                                ${data.title}
+                            </h2>
+                        </div>
+                        
+                        <!-- Container 16:9 cravado -->
+                        <div class="flex-1 w-full flex items-center justify-center min-h-0 relative">
+                            <div class="iframe-container w-full max-w-5xl aspect-video relative shadow-inner">
+                                <div class="absolute inset-0 flex items-center justify-center z-0 text-[#7B906F] flex-col gap-2">
+                                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
+                                    <span class="text-sm font-medium">Carregando cena...</span>
+                                </div>
+                                <iframe 
+                                    src="${iframeUrl}" 
+                                    class="w-full h-full absolute inset-0 z-10" 
+                                    allow="autoplay" 
+                                    frameborder="0">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Atualiza UI
+            currentSlideEl.textContent = index + 1;
+            categoryIndicator.textContent = data.category;
+            
+            // Botões de estado
+            btnPrev.disabled = index === 0;
+            btnNext.disabled = index === slidesData.length - 1;
+
+            updateRoadmapActiveState(index);
+            lucide.createIcons();
+            
+            // Retorna o foco para a janela principal para as setas funcionarem
+            window.focus();
+        }
+
+        // Navegação de Botões
+        btnPrev.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderSlide(currentIndex);
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentIndex < slidesData.length - 1) {
+                currentIndex++;
+                renderSlide(currentIndex);
+            }
+        });
+
+        // Controles pelo teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') btnNext.click();
+            if (e.key === 'ArrowLeft') btnPrev.click();
+        });
+
+        // Gerador de Estrelinhas Soft
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 20; 
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.innerHTML = '✦'; 
+                star.className = 'star text-xl md:text-2xl';
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                const scale = 0.4 + Math.random() * 0.8;
+                star.style.transform = `scale(${scale})`;
+
+                container.appendChild(star);
+            }
+        }
+
+        // Inicialização
+        createStars();
+        renderRoadmap();
+        renderSlide(currentIndex);
+    </script>
+</body>
+</html>
